@@ -1,4 +1,5 @@
 import React from 'react';
+import Avatar from './Avatar';
 
 interface Props {
   image: string | undefined;
@@ -11,8 +12,7 @@ const Profile = (props: Props): JSX.Element => {
   const { image, name, title, newTag } = props;
   return (
     <div className='profile'>
-      <img className="photo" src={image} alt='avatar' />
-      {newTag === true && <span className="new">New</span>}
+      <Avatar image={image} newTag={newTag} />
       <h1>{name}</h1>
       <p>{title}</p>
     </div>
