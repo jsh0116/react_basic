@@ -19,3 +19,10 @@
   height: 200px;
   border-radius: 100%;
 }
+
+.new {
+  position: absolute;
+  background-color: aqua;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+}

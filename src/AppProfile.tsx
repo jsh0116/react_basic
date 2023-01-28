@@ -8,6 +8,7 @@ const AppProfile = (): JSX.Element => {
         image="mypic.jpeg"
         name="SeungHoon Jeong"
         title="FullStack Developer"
+        newTag={true}
       />
     </>
   );
