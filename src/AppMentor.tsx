@@ -1,28 +1,41 @@
 import React, { useReducer, useState } from 'react';
+import { useImmer } from 'use-immer';
 import { Mentor } from './model/Mentor';
 import { Person } from './model/Person';
 import { personReducer } from './reducer/person-reducer';
 
 const AppMentor = (): JSX.Element => {
-  const [person, dispatch] = useReducer(personReducer, initialPerson);
+  // const [person, dispatch] = useReducer(personReducer, initialPerson);
+  const [person, updatePerson] = useImmer(initialPerson);
 
   const handleChangeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const type = e.currentTarget.name;
     const prev = prompt(`What is your mentor's ${type}?`);
     const current = prompt('what is name that you want to change?');
-    dispatch({ type: 'updated', prev, current });
+    // dispatch({ type: 'updated', prev, current });
+    updatePerson((person: Person) => {
+      const mentor = person.mentors.find(mentor => mentor.name === prev);
+      if (mentor !== undefined) {
+        mentor.name = current;
+      }
+    });
   };
 
   const handleInsert = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const targetName = prompt(`type your mentor's name`);
     const targetTitle = prompt(`type your mentor's title`);
-    dispatch({ type: 'added', targetName, targetTitle });
+    updatePerson((person: Person) => person.mentors.push({ name: targetName, title: targetTitle }));
+    // dispatch({ type: 'added', targetName, targetTitle });
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const type = e.currentTarget.name;
     const target = prompt(`What is your mentor's ${type}?`);
-    dispatch({ type: 'deleted', target });
+    updatePerson((person: Person) => {
+      const index = person.mentors.findIndex((mentor: Mentor) => mentor.name === type);
+      person.mentors.splice(index, 1);
+    })
+    // dispatch({ type: 'deleted', target });
   }
 
   return (
