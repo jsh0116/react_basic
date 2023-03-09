@@ -28,6 +28,7 @@ const App = (): JSX.Element => {
   return (
     <div className='container'>
       <div ref={pointRef} className='pointer' />
+
     </div>
   );
 }
