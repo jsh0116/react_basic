@@ -9,7 +9,7 @@ const Avatar = (props: Props): JSX.Element => {
   const { image, newTag } = props;
   return (
     <div className='avatar'>
-      <img className="photo" src={image} alt='avatar' />
+      <img className="photo" src={image} alt='avatar' width="200px" height="200px" />
       {newTag === true && <span className="new">New</span>}
     </div>
   )
