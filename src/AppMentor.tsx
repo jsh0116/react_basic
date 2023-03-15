@@ -1,42 +1,42 @@
-import React, { useReducer, useState } from 'react';
+import React, { memo, useCallback, useMemo, useReducer, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Mentor } from './model/Mentor';
 import { Person } from './model/Person';
 import { personReducer } from './reducer/person-reducer';
 
 const AppMentor = (): JSX.Element => {
-  // const [person, dispatch] = useReducer(personReducer, initialPerson);
-  const [person, updatePerson] = useImmer(initialPerson);
+  const [person, dispatch] = useReducer(personReducer, initialPerson);
+  // const [person, updatePerson] = useImmer(initialPerson);
 
-  const handleChangeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleChange = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const type = e.currentTarget.name;
     const prev = prompt(`What is your mentor's ${type}?`);
     const current = prompt('what is name that you want to change?');
-    // dispatch({ type: 'updated', prev, current });
-    updatePerson((person: Person) => {
-      const mentor = person.mentors.find(mentor => mentor.name === prev);
-      if (mentor !== undefined) {
-        mentor.name = current;
-      }
-    });
-  };
+    dispatch({ type: 'updated', prev, current });
+    // updatePerson((person: Person) => {
+    //   const mentor = person.mentors.find(mentor => mentor.name === prev);
+    //   if (mentor !== undefined) {
+    //     mentor.name = current;
+    //   }
+    // });
+  }, []);
 
-  const handleInsert = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleInsert = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const targetName = prompt(`type your mentor's name`);
     const targetTitle = prompt(`type your mentor's title`);
-    updatePerson((person: Person) => person.mentors.push({ name: targetName, title: targetTitle }));
-    // dispatch({ type: 'added', targetName, targetTitle });
-  };
+    // updatePerson((person: Person) => person.mentors.push({ name: targetName, title: targetTitle }));
+    dispatch({ type: 'added', targetName, targetTitle });
+  }, []);
 
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleDelete = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const type = e.currentTarget.name;
     const target = prompt(`What is your mentor's ${type}?`);
-    updatePerson((person: Person) => {
-      const index = person.mentors.findIndex((mentor: Mentor) => mentor.name === type);
-      person.mentors.splice(index, 1);
-    })
-    // dispatch({ type: 'deleted', target });
-  }
+    // updatePerson((person: Person) => {
+    //   const index = person.mentors.findIndex((mentor: Mentor) => mentor.name === type);
+    //   person.mentors.splice(index, 1);
+    // })
+    dispatch({ type: 'deleted', target });
+  }, []);
 
   return (
     <div>
@@ -53,21 +53,41 @@ const AppMentor = (): JSX.Element => {
           </li>
         ))}
       </ul>
-      <button name='name' onClick={handleChangeClick}>
-        멘토 이름 바꾸기
-      </button>
-      <button name='title' onClick={handleChangeClick}>
-        멘토 타이틀 바꾸기
-      </button>
-      <button onClick={handleInsert}>
-        멘토 추가
-      </button>
-      <button name='name' onClick={handleDelete}>
-        멘토 삭제
-      </button>
+      <Button text='멘토 이름 바꾸기' onClick={handleChange} />
+      <Button text='멘토 타이틀 바꾸기' onClick={handleChange} />
+      <Button text='멘토 추가' onClick={handleInsert} />
+      <Button text='멘토 삭제' onClick={handleDelete} />
     </div>
   );
 };
+
+interface ButtonProps {
+  text: string;
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
+
+const Button = memo((props: ButtonProps) => {
+  const { text, onClick } = props;
+  const result = useMemo(() => {
+    for (let i = 0; i < 10000; i += 1) {
+      console.log('🔥');
+    };
+  }, []);
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        backgroundColor: 'black',
+        color: 'white',
+        borderRadius: '20px',
+        margin: '0.4rem',
+      }}
+    >
+      {`${text} ${result}`}
+    </button>
+  )
+});
 
 const initialPerson: Person = {
   name: 'seunghoon',
