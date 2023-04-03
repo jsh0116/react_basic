@@ -19,15 +19,19 @@ const useProducts: Hook = (salesOnly: boolean) => {
   useEffect(() => {
     setLoading(true);
     setError(undefined);
-    fetch(`data/${salesOnly ? 'sale_' : ''}products.json`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchSalesData = async () => {
+      try {
+        const response = await fetch(`data/${salesOnly ? 'sale_' : ''}products.json`);
+        const data = await response.json();
         setProducts(data);
-      })
-      .catch((e) => setError('error!'))
-      .finally(() => setLoading(false))
-
-
+      } catch (e) {
+        console.error(e);
+        setError('error!');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSalesData();
     return () => {
       console.log('clear');
     }
