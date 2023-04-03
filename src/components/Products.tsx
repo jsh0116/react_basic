@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import useProducts from '../hooks/useProducts';
 import { Product } from '../model/Product';
+import { useQuery } from '@tanstack/react-query';
 
 const Products = (): JSX.Element => {
   const [checked, setChecked] = useState<boolean>(false);
-  const [loading, error, products] = useProducts(checked);
+  const { isLoading, error, data: products } = useQuery(['products', checked], async () => {
+    const fetchData = async () => {
+      const response = await fetch(`data/${checked ? 'sale_' : ''}products.json`);
+      const data = await response.json();
+      return data;
+    }
+    console.log('fetching...');
+    return fetchData();
+  });
+  // const [loading, error, products] = useProducts(checked);
   const handleChange = () => {
     setChecked((prev) => !prev);
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading...</p>;
 
   if (error) return <p>Error</p>;
 
