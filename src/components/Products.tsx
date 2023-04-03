@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import useProducts from '../hooks/useProducts';
 import { Product } from '../model/Product';
 
-const Products = () => {
-  const [checked, setChecked] = useState(false);
+const Products = (): JSX.Element => {
+  const [checked, setChecked] = useState<boolean>(false);
   const [loading, error, products] = useProducts(checked);
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -15,7 +15,10 @@ const Products = () => {
 
   return (
     <>
-      <input id='checkbox' type='checkbox' value={String(checked)} onChange={handleChange} />
+      <label>
+        <input id='checkbox' type='checkbox' value={String(checked)} onChange={handleChange} />
+        Show Only 🔥 Sale
+      </label>
       <ul>
         {products.map((product: Product) => {
           return (
