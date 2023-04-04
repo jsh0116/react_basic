@@ -5,7 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 
 const Products = (): JSX.Element => {
   const [checked, setChecked] = useState<boolean>(false);
-  const { isLoading, error, data: products } = useQuery(['products', checked], async () => {
+  const {
+    isLoading,
+    error,
+    data: products
+  } = useQuery(['products', checked], () => {
     const fetchData = async () => {
       const response = await fetch(`data/${checked ? 'sale_' : ''}products.json`);
       const data = await response.json();
@@ -13,7 +17,11 @@ const Products = (): JSX.Element => {
     }
     console.log('fetching...');
     return fetchData();
-  });
+  },
+    {
+      staleTime: 5000,
+    }
+  );
   // const [loading, error, products] = useProducts(checked);
   const handleChange = () => {
     setChecked((prev) => !prev);
