@@ -15,7 +15,7 @@ const Products = (): JSX.Element => {
       const data = await response.json();
       return data;
     }
-    console.log('fetching...');
+    console.log('fetching...', checked);
     return fetchData();
   },
     {

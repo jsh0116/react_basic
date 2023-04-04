@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Products from './Products';
-
+import { useQueryClient } from '@tanstack/react-query'
 const MainProducts = (): JSX.Element => {
   const [showLeftProducts, setShowLeftProducts] = useState<boolean>(true);
   const [showRightProducts, setShowRightProducts] = useState<boolean>(true);
-
+  const client = useQueryClient();
   return (
     <main className='container'>
       <div>
@@ -19,6 +19,11 @@ const MainProducts = (): JSX.Element => {
           Toggle
         </button>
       </div>
+      <button
+        onClick={() => client.invalidateQueries(['products', false])}
+      >
+        info update!
+      </button>
     </main>
   );
 }
